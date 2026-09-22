@@ -1,1 +1,6 @@
-export { Button } from './Button';
+import Routes from './components/Routes';
+import { Route } from './types';
+
+export { default as RouterProvider } from './components/RouterProvider';
+
+export const createRoutes = (routes: Route[]) => () => <Routes routes={routes} />
