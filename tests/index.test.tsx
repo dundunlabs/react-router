@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@rstest/core";
-import { render, screen } from '@testing-library/react'
-import { BrowserRouter, createRoutes, RouterProvider } from '../src'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { BrowserRouter, createRoutes, Link, RouterProvider } from '../src'
 
 describe('router', () => {
   const router = new BrowserRouter()
@@ -9,7 +9,7 @@ describe('router', () => {
       path: '/',
       children: [
         {
-          Component: () => 'Home'
+          Component: () => <Link to='/users/1'>Visit user 1</Link>
         },
         {
           path: 'users',
@@ -39,7 +39,11 @@ describe('router', () => {
   )
   test('renders correct route', async () => {
     render(<App />)
-    expect(await screen.findByText('Home')).toBeInTheDocument()
+    const linkToUser1 = await screen.findByRole('link', { name: 'Visit user 1' })
+    expect(linkToUser1).toHaveAttribute('href', '/users/1')
+
+    fireEvent.click(linkToUser1)
+    expect(await screen.findByText('Hello user')).toBeInTheDocument()
 
     router.push('/foo')
     expect(await screen.findByText('Foo')).toBeInTheDocument()
@@ -47,7 +51,5 @@ describe('router', () => {
     router.replace('/users/new')
     expect(await screen.findByText('New user')).toBeInTheDocument()
 
-    router.push('/users/1')
-    expect(await screen.findByText('Hello user')).toBeInTheDocument()
   })
 })
