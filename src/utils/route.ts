@@ -1,5 +1,5 @@
+import { joinPaths, matchPath } from "./path";
 import type { Route } from "../types";
-import { joinPaths } from "./path";
 
 export const indexRoutes = (routes: Route[]) => routes.reduce((indexes, { path = '', children }, index) => {
   if (children) {
@@ -12,3 +12,11 @@ export const indexRoutes = (routes: Route[]) => routes.reduce((indexes, { path =
 
   return indexes
 }, new Map<string, number[]>())
+
+export function matchRouteIndexes(routeIndexes: Map<string, number[]>, pathname: string) {
+  for (const [path, indexes] of routeIndexes) {
+    const params = matchPath(path, pathname)
+    if (params) return { path, indexes, params }
+  }
+  return null
+}
