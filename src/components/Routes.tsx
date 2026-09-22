@@ -1,8 +1,9 @@
 import { useMemo } from "react"
 import { indexRoutes, matchRouteIndexes } from "../utils/route"
 import { useLocation } from "../contexts/LocationContext"
-import type { Route as RouteObject } from "../types"
 import Route from "./Route"
+import ParamsContext from "../contexts/ParamsContext"
+import type { Route as RouteObject } from "../types"
 
 interface RoutesProps {
   routes: RouteObject[]
@@ -15,7 +16,11 @@ export default function Routes({ routes }: RoutesProps) {
 
   if (!match) return null
 
-  return renderRoutes(routes, match.indexes)
+  return (
+    <ParamsContext value={match.params}>
+      {renderRoutes(routes, match.indexes)}
+    </ParamsContext>
+  )
 }
 
 function renderRoutes(routes: RouteObject[], indexes: number[]) {

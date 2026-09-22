@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@rstest/core";
 import { fireEvent, render, screen } from '@testing-library/react'
-import { BrowserRouter, createRoutes, Link, RouterProvider } from '../src'
+import { BrowserRouter, createRoutes, Link, RouterProvider, useParams } from '../src'
 
 describe('router', () => {
   const router = new BrowserRouter()
@@ -20,7 +20,10 @@ describe('router', () => {
             },
             {
               path: ':userId',
-              element: 'Hello user'
+              Component: () => {
+                const { userId } = useParams()
+                return 'Hello user ' + userId
+              }
             }
           ]
         }
@@ -43,13 +46,12 @@ describe('router', () => {
     expect(linkToUser1).toHaveAttribute('href', '/users/1')
 
     fireEvent.click(linkToUser1)
-    expect(await screen.findByText('Hello user')).toBeInTheDocument()
+    expect(await screen.findByText('Hello user 1')).toBeInTheDocument()
 
     router.push('/foo')
     expect(await screen.findByText('Foo')).toBeInTheDocument()
 
     router.replace('/users/new')
     expect(await screen.findByText('New user')).toBeInTheDocument()
-
   })
 })
