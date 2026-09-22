@@ -4,3 +4,5 @@ export interface Route {
   element?: React.ReactNode
   children?: this[]
 }
+
+export type Location = Pick<globalThis.Location, 'pathname' | 'hash' | 'search'>

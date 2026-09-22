@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import type { Location } from "../types";
 
 const LocationContext = createContext<Location | undefined>(undefined)
 

@@ -1,8 +1,9 @@
 import { describe, expect, test } from "@rstest/core";
 import { render, screen } from '@testing-library/react'
-import { createRoutes, RouterProvider } from '../src'
+import { BrowserRouter, createRoutes, RouterProvider } from '../src'
 
 describe('router', () => {
+  const router = new BrowserRouter()
   const Routes = createRoutes([
     {
       path: '/',
@@ -32,24 +33,21 @@ describe('router', () => {
   ])
 
   const App = () => (
-    <RouterProvider>
+    <RouterProvider router={router}>
       <Routes />
     </RouterProvider>
   )
   test('renders correct route', async () => {
-    const { rerender } = render(<App />)
-    expect(screen.getByText('Home')).toBeInTheDocument()
+    render(<App />)
+    expect(await screen.findByText('Home')).toBeInTheDocument()
 
-    history.pushState(null, '', '/foo')
-    rerender(<App />)
-    expect(screen.getByText('Foo')).toBeInTheDocument()
+    router.push('/foo')
+    expect(await screen.findByText('Foo')).toBeInTheDocument()
 
-    history.pushState(null, '', '/users/new')
-    rerender(<App />)
-    expect(screen.getByText('New user')).toBeInTheDocument()
+    router.replace('/users/new')
+    expect(await screen.findByText('New user')).toBeInTheDocument()
 
-    history.pushState(null, '', '/users/1')
-    rerender(<App />)
-    expect(screen.getByText('Hello user')).toBeInTheDocument()
+    router.push('/users/1')
+    expect(await screen.findByText('Hello user')).toBeInTheDocument()
   })
 })
