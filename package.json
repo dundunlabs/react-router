@@ -23,6 +23,7 @@
     "@rslib/core": "^1.0.1",
     "@rstest/adapter-rslib": "^0.11.12",
     "@rstest/core": "^0.11.12",
+    "@rstest/coverage-istanbul": "0.11.12",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
