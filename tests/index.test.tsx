@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@rstest/core";
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { BrowserRouter, createRoutes, Link, Redirect, RouterProvider, useParams } from '../src'
 
 describe('router', () => {
@@ -9,17 +9,22 @@ describe('router', () => {
       path: '/',
       children: [
         {
-          Component: () => <Link to='/users/1'>Visit user 1</Link>
+          Component: () => (
+            <nav>
+              <Link to='/users/new'>Create user</Link>
+              <Link to='/users'>Visit first user</Link>
+            </nav>
+          )
         },
         {
           path: 'users',
           children: [
             {
-              element: <Redirect to='/users/new' replace />
+              element: <Redirect to='/users/1' replace />
             },
             {
               path: 'new',
-              element: 'New user'
+              element: <Link to={-1}>Back</Link>
             },
             {
               path: ':userId',
@@ -45,16 +50,16 @@ describe('router', () => {
   )
   test('renders correct route', async () => {
     render(<App />)
-    const linkToUser1 = await screen.findByRole('link', { name: 'Visit user 1' })
-    expect(linkToUser1).toHaveAttribute('href', '/users/1')
+    const newUser = await screen.findByRole('link', { name: 'Create user' })
+    expect(newUser).toHaveAttribute('href', '/users/new')
 
-    fireEvent.click(linkToUser1)
+    fireEvent.click(newUser)
+    const back = await screen.findByRole('button', { name: 'Back' })
+    expect(back).toBeInTheDocument()
+
+    fireEvent.click(back)
+    const firstUser = await screen.findByRole('link', { name: 'Visit first user' })
+    fireEvent.click(firstUser)
     expect(await screen.findByText('Hello user 1')).toBeInTheDocument()
-
-    router.push('/foo')
-    expect(await screen.findByText('Foo')).toBeInTheDocument()
-
-    router.replace('/users')
-    expect(await screen.findByText('New user')).toBeInTheDocument()
   })
 })

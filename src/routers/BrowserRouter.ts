@@ -13,6 +13,11 @@ export default class BrowserRouter extends Router {
     history.replaceState(null, '', to)
     return currentLocation()
   };
+
+  _go = (delta: number) => {
+    history.go(delta)
+    return currentLocation()
+  };
 }
 
 function currentLocation(): Location {
