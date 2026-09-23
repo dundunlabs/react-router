@@ -1,5 +1,5 @@
 {
-  "name": "@dundunlabs/react-router",
+  "name": "@dundunlabs/router",
   "version": "0.0.0",
   "type": "module",
   "exports": {
