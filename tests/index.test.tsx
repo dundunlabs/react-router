@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@rstest/core";
 import { fireEvent, render, screen } from '@testing-library/react'
-import { BrowserRouter, createRoutes, Link, RouterProvider, useParams } from '../src'
+import { BrowserRouter, createRoutes, Link, Redirect, RouterProvider, useParams } from '../src'
 
 describe('router', () => {
   const router = new BrowserRouter()
@@ -14,6 +14,9 @@ describe('router', () => {
         {
           path: 'users',
           children: [
+            {
+              element: <Redirect to='/users/new' replace />
+            },
             {
               path: 'new',
               element: 'New user'
@@ -51,7 +54,7 @@ describe('router', () => {
     router.push('/foo')
     expect(await screen.findByText('Foo')).toBeInTheDocument()
 
-    router.replace('/users/new')
+    router.replace('/users')
     expect(await screen.findByText('New user')).toBeInTheDocument()
   })
 })
