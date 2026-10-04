@@ -1,29 +1,29 @@
 import { useRouter } from "../contexts/RouterContext"
 
-interface LinkAnchorProps extends React.ComponentProps<'a'> {to: string}
-interface LinkButtonProps extends React.ComponentProps<'button'> {to: number}
+interface LinkAnchorProps extends React.ComponentProps<'a'> { to: string }
+interface LinkButtonProps extends React.ComponentProps<'button'> { to: number }
 
-export default function Link(props: LinkAnchorProps | LinkButtonProps) {
+export default function Link(props: (LinkAnchorProps | LinkButtonProps) & { as?: React.ElementType }) {
   const router = useRouter()
 
   if (isLinkButton(props)) {
-    const { to, ...rest } = props
+    const { as: Component = 'button', to, ...rest } = props
 
     return (
-      <button
+      <Component
         {...rest}
         onClick={() => router.go(to)}
       />
     )
   }
 
-  const { to, ...rest } = props
+  const { as: Component = 'a', to, ...rest } = props
 
   return (
-    <a
+    <Component
       {...rest}
       href={to}
-      onClick={e => {
+      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
         router.push(to)
       }}
