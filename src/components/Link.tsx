@@ -2,8 +2,11 @@ import { useRouter } from "../contexts/RouterContext"
 
 interface LinkAnchorProps extends React.ComponentProps<'a'> { to: string }
 interface LinkButtonProps extends React.ComponentProps<'button'> { to: number }
+type LinkProps<T extends React.ElementType> = (LinkAnchorProps | LinkButtonProps)
+  & { as?: T }
+  & React.ComponentProps<T>
 
-export default function Link(props: (LinkAnchorProps | LinkButtonProps) & { as?: React.ElementType }) {
+export default function Link<T extends React.ElementType>(props: LinkProps<T>) {
   const router = useRouter()
 
   if (isLinkButton(props)) {

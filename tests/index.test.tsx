@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@rstest/core";
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { BrowserRouter, createRoutes, Link, Redirect, RouterProvider, useParams } from '../src'
 
 describe('router', () => {
