@@ -10,6 +10,6 @@ export { default as Redirect } from './components/Redirect';
 
 export { useRouter } from './contexts/RouterContext';
 export { useParams } from './contexts/ParamsContext';
-
+export { useLocation } from './contexts/LocationContext';
 
 export const createRoutes = (routes: Route[]) => () => <Routes routes={routes} />
